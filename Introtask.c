@@ -10,7 +10,7 @@ int main(){
 	GPIOA->MODER &= ~(0xF) ;// Reset the last four bits which is pin 0 and pin 1
 	GPIOA->MODER |= (0xA); //Set up Pin 0 and Pin 1 as alternate function
 	
-	GPIOA->AFR[0] &= (0b0100) ; //set up PA0 as  AF4 (USART4)              ***Need to ask why there is no AFRL***
+	GPIOA->AFR[0] &= (0b0100) ; //set up PA0 as  AF4 (USART4)              
 	GPIOA->AFR[1] &= (0b0100) ; // set up PA1 as AF4 (USART4) 
 	
 	
