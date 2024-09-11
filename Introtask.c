@@ -3,7 +3,7 @@
 
 int main(){
 	// PB1 : LED ,  PA0: USART4_Tx  ,  PA1: USART4_Rx
-	
+	char msg; // store the data from receive data register
 	RCC->IOPENR |= 0b11;  //enable GPIOA & GPIOB
 	
 	//********GPIOA Alternate function**********
@@ -28,8 +28,8 @@ int main(){
 	//*******Set up baud rate for 9600bps************
 	USART4->BRR =0x0341; //       from reference manual                                      
 	
-	//******Enable FIFO(First in first out) mode for USART4**********
-	USART4->CR1 |= (1<<29);
+	//******Disable FIFO(First in first out) mode for USART4**********
+	USART4->CR1 &= ~(1<<29);
 	
 	// Enable USART 4 Transmit(TE)
 	USART4->CR1 |= 0b1000;
@@ -43,15 +43,18 @@ int main(){
 	
 	while(1){
 		
-		//Android phone sends integer 1 through bluethooth terminal
-		if(USART4->RDR == 1){
-			GPIOB->ODR |= (0b1<<1); //PB1 becomes high => turn on LED
+		while(USART4->ISR &(1<<5)){ //RXNE : data is ready to be read
+			
 		}
-	
-		//Android phone sends integer 0 through bluethooth terminal
-		else if(USART4->RDR == 0){
-			GPIOB->ODR &= ~(0b1<<1); // PB1 become low => turn off LED
+		msg = USART4->RDR ;//read from recieve data register
+		
+		if(msg == 'y'){
+			GPIOB->ODR |=(0b1<<1); //PB1 become high => turn on LED 
 		}
+		else if(msg == 'n'){
+			GPIOB->ODR &=~(0b1<<1); //PB1 become low => turn off LED 
+		}
+	}
 	}
 }
 
