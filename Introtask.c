@@ -3,7 +3,7 @@
 
 int main(){
 	// PB1 : LED ,  PA0: USART4_Tx  ,  PA1: USART4_Rx
-	char msg; // store the data from receive data register
+	volatile char msg =0; // store the data from receive data register
 	RCC->IOPENR |= 0b11;  //enable GPIOA & GPIOB
 	
 	//********GPIOA Alternate function**********
@@ -11,7 +11,7 @@ int main(){
 	GPIOA->MODER |= (0xA); //Set up Pin 0 and Pin 1 as alternate function
 	
 	GPIOA->AFR[0] &= (0b0100) ; //set up PA0 as  AF4 (USART4)              
-	GPIOA->AFR[1] &= (0b0100) ; // set up PA1 as AF4 (USART4) 
+	GPIOA->AFR[0] &= (0b0100<<4) ; // set up PA1 as AF4 (USART4) 
 	
 	
 	//******Enable PB1 for LED**************
@@ -26,7 +26,7 @@ int main(){
 	RCC->APBENR1 |= (1<<19); 
 	
 	//*******Set up baud rate for 9600bps************
-	USART4->BRR =0x0341; //       from reference manual                                      
+	USART4->BRR =(16000000/9600); //       from reference manual                                      
 	
 	//******Disable FIFO(First in first out) mode for USART4**********
 	USART4->CR1 &= ~(1<<29);
@@ -43,19 +43,18 @@ int main(){
 	
 	while(1){
 		
-		while(USART4->ISR &(1<<5)){ //RXNE : data is ready to be read
+		while(!(USART4->ISR & USART_ISR_RXNE_RXFNE)){ //RXNE : data is ready to be read
 			
 		}
 		msg = USART4->RDR ;//read from recieve data register
 		
-		if(msg == 'y'){
+		if(msg == '1'){
 			GPIOB->ODR |=(0b1<<1); //PB1 become high => turn on LED 
 		}
-		else if(msg == 'n'){
+		else if(msg == '0'){
 			GPIOB->ODR &=~(0b1<<1); //PB1 become low => turn off LED 
 		}
 	}
 	}
-}
 
 
