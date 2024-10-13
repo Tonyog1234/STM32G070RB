@@ -7,4 +7,4 @@
 2. Interfacing bluetooth HC-05 to control an LED:
    MCU : STM32G070RB
    IDE : Keil
-   Task : *******HAS NOT FINSIHED YET************
+   Task : Use bluetooth terminal to control LED by sending '1' or '0'.
