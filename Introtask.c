@@ -2,7 +2,7 @@
 
 
 int main(){
-	// PB1 : LED ,  PA0: USART4_Tx  ,  PA1: USART4_Rx
+	// PB0 : LED ,  PA0: USART4_Tx  ,  PA1: USART4_Rx
 	volatile char msg =0; // store the data from receive data register
 	RCC->IOPENR |= 0b11;  //enable GPIOA & GPIOB
 	
@@ -10,15 +10,15 @@ int main(){
 	GPIOA->MODER &= ~(0xF) ;// Reset the last four bits which is pin 0 and pin 1
 	GPIOA->MODER |= (0xA); //Set up Pin 0 and Pin 1 as alternate function
 	
-	GPIOA->AFR[0] &= (0b0100) ; //set up PA0 as  AF4 (USART4)              
-	GPIOA->AFR[0] &= (0b0100<<4) ; // set up PA1 as AF4 (USART4) 
+	GPIOA->AFR[0] |= (0b0100) ; //set up PA0 as  AF4 (USART4)              
+	GPIOA->AFR[0] |= (0b0100<<4) ; // set up PA1 as AF4 (USART4) 
 	
 	
 	//******Enable PB1 for LED**************
-	GPIOB->MODER &= ~(0b11<<1*2) ;// Reset the last two bits
-	GPIOB->MODER |= (0b01<<1*2); //Set up Pin 1 as output
+	GPIOB->MODER &= ~(0b11) ;// Reset the last two bits
+	GPIOB->MODER |= (0b01); //Set up Pin 1 as output
 	
-	GPIOB->OTYPER &= ~(0b1<<1); // Set up  pin 1 as push pull
+	GPIOB->OTYPER &= ~(0b1); // Set up  pin 1 as push pull
 	
 	//**********Initialize USART4**************
 	
@@ -49,12 +49,10 @@ int main(){
 		msg = USART4->RDR ;//read from recieve data register
 		
 		if(msg == '1'){
-			GPIOB->ODR |=(0b1<<1); //PB1 become high => turn on LED 
+			GPIOB->ODR |=(0b1); //PB0 become high => turn on LED 
 		}
 		else if(msg == '0'){
-			GPIOB->ODR &=~(0b1<<1); //PB1 become low => turn off LED 
+			GPIOB->ODR &=~(0b1); //PB0 become low => turn off LED 
 		}
 	}
 	}
-
-
