@@ -16,9 +16,9 @@ int main(){
 	
 	//******Enable PB0 for LED**************
 	GPIOB->MODER &= ~(0b11) ;// Reset the last two bits
-	GPIOB->MODER |= (0b01); //Set up Pin 1 as output
+	GPIOB->MODER |= (0b01); //Set up Pin 0 as output
 	
-	GPIOB->OTYPER &= ~(0b1); // Set up  pin 1 as push pull
+	GPIOB->OTYPER &= ~(0b1); // Set up  pin 0 as push pull
 	
 	//**********Initialize USART4**************
 	
