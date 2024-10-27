@@ -14,7 +14,7 @@ int main(){
 	GPIOA->AFR[0] |= (0b0100<<4) ; // set up PA1 as AF4 (USART4) 
 	
 	
-	//******Enable PB1 for LED**************
+	//******Enable PB0 for LED**************
 	GPIOB->MODER &= ~(0b11) ;// Reset the last two bits
 	GPIOB->MODER |= (0b01); //Set up Pin 1 as output
 	
